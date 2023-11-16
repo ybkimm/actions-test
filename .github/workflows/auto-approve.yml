@@ -19,7 +19,7 @@ jobs:
         script: |
           const fs = require('fs');
 
-          const regex = /^-?\s*\[[xX ]\].*(?:$)/mg;
+          const regex = /^-?\s*\[([xX ])\].*(?:$)/mg;
           const matches = Array.from(context.payload.pull_request.body.matchAll(regex));
           const allChecked = matches.every((match) => match[1].toLowerCase() === 'x');
           
