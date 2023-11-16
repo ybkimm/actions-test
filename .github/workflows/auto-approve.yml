@@ -14,9 +14,7 @@ jobs:
       uses: actions/github-script@v5
       with:
         github-token: ${{ secrets.GITHUB_TOKEN }}
-        script: |
-          const { context, github } = require('github-script');
-          
+        script: |          
           async function run() {
             const pullRequest = context.payload.pull_request;
 
