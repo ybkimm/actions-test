@@ -23,11 +23,11 @@ jobs:
           const matches = Array.from(context.payload.pull_request.body.matchAll(regex));
           const allChecked = matches.every((match) => match[1].toLowerCase() === 'x');
 
-          console.log(`allChecked=${allChecked}\n`);
-          fs.appendFileSync(process.env.GITHUB_ENV, `allChecked=${allChecked}\n`);
+          console.log(`ALL_CHECKED=${allChecked}\n`);
+          fs.appendFileSync(process.env.GITHUB_OUTPUT, `allChecked=${allChecked}\n`);
 
     - name: Auto-approve if checkboxes are checked
-      if: steps.set-context.outputs.allChecked == 'true'
+      if: steps.set-context.outputs.ALL_CHECKED == 'true'
       uses: actions/github-script@v5
       with:
         github-token: ${{ secrets.GITHUB_TOKEN }}
