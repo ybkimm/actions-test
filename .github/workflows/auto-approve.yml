@@ -10,30 +10,33 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Auto-approve if checkboxes are checked
+    - name: Set context variables
+      id: set-context
       uses: actions/github-script@v5
       with:
         github-token: ${{ secrets.GITHUB_TOKEN }}
-        script: |          
+        script: |
+          const checkboxes = context.payload.pull_request.body.match(/\[( |x)\]/g) || [];
+          const allChecked = checkboxes.every((checkbox) => checkbox.toLowerCase() === '[x]');
+          console.log(`::set-output name=allChecked::${allChecked}`);
+
+    - name: Auto-approve if checkboxes are checked
+      if: steps.set-context.outputs.allChecked == 'true'
+      uses: actions/github-script@v5
+      with:
+        github-token: ${{ secrets.GITHUB_TOKEN }}
+        script: |
           async function run() {
             const pullRequest = context.payload.pull_request;
 
-            const checkboxes = pullRequest.body.match(/\[( |x)\]/g) || [];
+            await github.pulls.createReview({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              pull_number: pullRequest.number,
+              event: 'APPROVE',
+            });
 
-            const allChecked = checkboxes.every((checkbox) => checkbox.toLowerCase() === '[x]');
-
-            if (allChecked) {
-              await github.pulls.createReview({
-                owner: context.repo.owner,
-                repo: context.repo.repo,
-                pull_number: pullRequest.number,
-                event: 'APPROVE',
-              });
-
-              console.log('Pull request approved.');
-            } else {
-              console.log('Not all checkboxes are checked. Pull request not approved.');
-            }
+            console.log('Pull request approved.');
           }
 
           run();
