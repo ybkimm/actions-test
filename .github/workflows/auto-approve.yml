@@ -20,6 +20,7 @@ jobs:
           const fs = require('fs');
           
           const checkboxes = context.payload.pull_request.body.match(/^-?\s*\[(x| )\].*(?:$)/mg) || [];
+          console.log(JSON.stringify(checkboxes));
           const allChecked = checkboxes.every((checkbox) => checkbox.toLowerCase() === 'x');
           console.log(process.env.GITHUB_ENV);
 
