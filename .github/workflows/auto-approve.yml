@@ -32,17 +32,13 @@ jobs:
       with:
         github-token: ${{ secrets.GITHUB_TOKEN }}
         script: |
-          async function run() {
-            const pullRequest = context.payload.pull_request;
+          const pullRequest = context.payload.pull_request;
 
-            await github.pulls.createReview({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              pull_number: pullRequest.number,
-              event: 'APPROVE',
-            });
+          await github.pulls.createReview({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            pull_number: pullRequest.number,
+            event: 'APPROVE',
+          });
 
-            console.log('Pull request approved.');
-          }
-
-          run();
+          console.log('Pull request approved.');
