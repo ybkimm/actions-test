@@ -13,7 +13,7 @@ jobs:
     steps:
     - name: Set context variables
       id: set-context
-      uses: actions/github-script@v5
+      uses: actions/github-script@v7
       with:
         github-token: ${{ secrets.GITHUB_TOKEN }}
         script: |
@@ -28,16 +28,14 @@ jobs:
 
     - name: Auto-approve if checkboxes are checked
       if: steps.set-context.outputs.ALL_CHECKED == 'true'
-      uses: actions/github-script@v5
+      uses: actions/github-script@v7
       with:
         github-token: ${{ secrets.GITHUB_TOKEN }}
         script: |
-          const pullRequest = context.payload.pull_request;
-
           await github.pulls.createReview({
             owner: context.repo.owner,
             repo: context.repo.repo,
-            pull_number: pullRequest.number,
+            pull_number: context.payload.pull_request.number,
             event: 'APPROVE',
           });
 
