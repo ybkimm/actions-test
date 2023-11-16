@@ -24,7 +24,7 @@ jobs:
           const allChecked = matches.every((match) => match[1].toLowerCase() === 'x');
 
           console.log(`ALL_CHECKED=${allChecked}\n`);
-          fs.appendFileSync(process.env.GITHUB_OUTPUT, `allChecked=${allChecked}\n`);
+          fs.appendFileSync(process.env.GITHUB_OUTPUT, `ALL_CHECKED=${allChecked}\n`);
 
     - name: Auto-approve if checkboxes are checked
       if: steps.set-context.outputs.ALL_CHECKED == 'true'
