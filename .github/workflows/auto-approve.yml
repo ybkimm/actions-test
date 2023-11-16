@@ -18,6 +18,7 @@ jobs:
         script: |
           const checkboxes = context.payload.pull_request.body.match(/\[( |x)\]/g) || [];
           const allChecked = checkboxes.every((checkbox) => checkbox.toLowerCase() === '[x]');
+          console.log(process.env.GITHUB_ENV);
           console.log(`::set-output name=allChecked::${allChecked}`);
 
     - name: Auto-approve if checkboxes are checked
