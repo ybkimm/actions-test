@@ -18,12 +18,11 @@ jobs:
         github-token: ${{ secrets.GITHUB_TOKEN }}
         script: |
           const fs = require('fs');
-          
-          const checkboxes = context.payload.pull_request.body.match(/^-?\s*\[(x| )\].*(?:$)/mg) || [];
-          console.log(JSON.stringify(checkboxes));
-          const allChecked = checkboxes.every((checkbox) => checkbox.toLowerCase() === 'x');
-          console.log(process.env.GITHUB_ENV);
 
+          const regex = /^-?\s*\[[xX ]\].*(?:$)/mg;
+          const matches = Array.from(context.payload.pull_request.body.matchAll(regex));
+          const allChecked = matches.every((match) => match[1].toLowerCase() === 'x');
+          
           fs.appendFileSync(process.env.GITHUB_ENV, `allChecked=${allChecked}\n`);
 
     - name: Auto-approve if checkboxes are checked
